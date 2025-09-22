@@ -1,0 +1,115 @@
+/* General Layout */
+.dashboard-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* LEFT SIDE (Inputs) */
+.dashboard-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* RIGHT SIDE (Charts) */
+.dashboard-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Cards for charts */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card.large {
+  flex: 2;
+}
+
+.card.small {
+  flex: 1;
+}
+
+/* Input Row */
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-label {
+  min-width: 120px;
+  font-weight: bold;
+}
+
+.input-field {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.input-field.readonly {
+  background: #f8f8f8;
+  color: #333;
+}
+
+/* Custom fields row */
+.custom-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Result section with type, equals sign, and amount */
+.result-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.equals-sign {
+  font-weight: bold;
+  margin: 0 5px;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  color: darkred;
+}
+
+/* Add Button */
+.add-btn {
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-btn:hover {
+  background: #0056b3;
+}
+
+/* Force "Personal Use" label to green */
+.input-label.personal-use {
+  color: #096b32 !important;
+  font-weight: bold;
+}
