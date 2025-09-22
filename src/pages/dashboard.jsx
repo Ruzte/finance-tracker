@@ -83,117 +83,120 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard-container">
-      {/* LEFT SIDE */}
-      <div className="dashboard-left">
-        {/* Salary input */}
-        <div className="input-row">
-          <label className="input-label">Salary</label>
-          <input
-            type="text"
-            value={formatNumber(salary)}
-            onChange={(e) => setSalary(parseNumber(e.target.value))}
-            className="input-field"
-          />
-        </div>
-
-        {/* Dynamic fields */}
-        {allocations.calcFields.map((f) => (
-          <div key={f.id} className="input-row custom-field">
-            {/* Title */}
+    <>
+      <div className="navbar">
+        <h2 className="navbar-logo">💰 Finance Tracker</h2>
+      </div>
+      
+      <div className="dashboard-container">
+        <div class="card main">
+        {/* LEFT SIDE */}
+        <div className="dashboard-left">
+          {/* Salary input */}
+          <div className="input-row">
+            <label className="input-label">Salary</label>
             <input
               type="text"
-              value={f.title}
-              onChange={(e) => updateField(f.id, "title", e.target.value)}
-              className="input-field"
-              style={{ color: f.color }}
+              value={formatNumber(salary)}
+              onChange={(e) => setSalary(parseNumber(e.target.value))}
+              placeholder="Enter your salary"
+              className="salary-input"
             />
+          </div>
 
-            {/* Amount */}
-            <input
-              type="number"
-              value={f.amount}
-              onChange={(e) => updateField(f.id, "amount", e.target.value)}
-              className="input-field"
-            />
 
-            {/* Type + Equals + Result */}
-            <div className="result-wrapper">
-              <select
-                value={f.type}
-                onChange={(e) => updateField(f.id, "type", e.target.value)}
-                className="input-field"
-              >
-                <option value="fixed">₱</option>
-                <option value="percent">%</option>
-              </select>
-              <span className="equals-sign">=</span>
+          {/* Dynamic fields */}
+          {allocations.calcFields.map((f) => (
+            <div key={f.id} className="input-row custom-field">
+              {/* Title */}
               <input
                 type="text"
-                value={formatNumber(f.value)}
-                readOnly
-                className="input-field readonly"
+                value={f.title}
+                onChange={(e) => updateField(f.id, "title", e.target.value)}
+                className="input-field"
+                style={{ color: f.color }}
               />
-              <button
-                className="delete-btn"
-                onClick={() => deleteField(f.id)}
-                title="Delete"
-              >
-                ✖
-              </button>
+
+              {/* Amount */}
+              <input
+                type="number"
+                value={f.amount}
+                onChange={(e) => updateField(f.id, "amount", e.target.value)}
+                className="input-field"
+              />
+
+              {/* Type + Equals + Result */}
+              <div className="result-wrapper">
+                <select
+                  value={f.type}
+                  onChange={(e) => updateField(f.id, "type", e.target.value)}
+                  className="input-field"
+                >
+                  <option value="fixed">₱</option>
+                  <option value="percent">%</option>
+                </select>
+                <span className="equals-sign">=</span>
+                  <span className="calculated-value">{formatNumber(f.value)}</span>
+
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteField(f.id)}
+                  title="Delete"
+                >
+                  ✖
+                </button>
+              </div>
             </div>
+          ))}
+
+          {/* Add field button */}
+          <button className="add-btn" onClick={addField}>+ Add New Field</button>
+        </div>
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="dashboard-right">
+          <div className="card large">
+            <h4>Allocation Overview</h4>
+            <PieChart width={900} height={500}>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                label
+              >
+                {pieData.map((entry, index) => {
+                  let color;
+                  if (entry.name === "Personal Use") {
+                    color = "#096b32"; // Force green
+                  } else {
+                    color = COLORS[index % COLORS.length];
+                  }
+                  return <Cell key={index} fill={color} />;
+                })}
+              </Pie>
+              <Tooltip formatter={(value) => formatNumber(value)} />
+              <Legend />
+            </PieChart>
           </div>
-        ))}
-
-        {/* Add field button */}
-        <button className="add-btn" onClick={addField}>+ Add New Field</button>
-
-        {/* Personal Use */}
-        <div className="input-row">
-          <label className="input-label" style={{ color: "#096b32", fontWeight: "bold" }}>Personal Use</label>
-          <input
-            type="text"
-            value={formatNumber(allocations.personal)}
-            readOnly
-            className="input-field readonly"
-          />
-        </div>
-      </div>
-
-      {/* RIGHT SIDE */}
-      <div className="dashboard-right">
-        <div className="card large">
-          <h3>Allocation Overview</h3>
-          <PieChart width={400} height={300}>
-            <Pie
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              label
+          <div className="card small">
+            {/* Personal Use */}
+          <div className="input-row">
+            <label
+              className="input-label"
+              style={{ color: "#096b32", fontWeight: "bold" }}
             >
-              {pieData.map((entry, index) => {
-                let color;
-                if (entry.name === "Personal Use") {
-                  color = "#096b32"; // Force green
-                } else {
-                  color = COLORS[index % COLORS.length];
-                }
-                return <Cell key={index} fill={color} />;
-              })}
-            </Pie>
-            <Tooltip formatter={(value) => formatNumber(value)} />
-            <Legend />
-          </PieChart>
-        </div>
-        <div className="card small">
-          <h3>Future Graph</h3>
-          <p>Reserved for later...</p>
+              Play Money 
+            </label>
+            <span className="personal-value">{formatNumber(allocations.personal)}</span>
+          </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
