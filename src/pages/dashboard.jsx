@@ -6,6 +6,11 @@ const Dashboard = () => {
   const [salary, setSalary] = useState("");
   const [fields, setFields] = useState([]);
 
+  // NEW STATES for Expenditure section
+  const [targetAmount, setTargetAmount] = useState("");   // Target savings/expenditure
+  const [selectedField, setSelectedField] = useState(""); // Which field it belongs to
+  const [frequency, setFrequency] = useState("");         // daily / weekly / monthly
+
   const COLORS = [
     "#0088FE", "#FFBB28", "#FF8042", "#A020F0", "#FF4444",
     "#8884D8", "#82ca9d", "#00C49F", "#FF69B4", "#CD5C5C",
@@ -181,19 +186,122 @@ const Dashboard = () => {
               <Tooltip formatter={(value) => formatNumber(value)} />
               <Legend />
             </PieChart>
-          </div>
-          <div className="card small">
             {/* Personal Use */}
-          <div className="input-row">
-            <label
-              className="input-label"
-              style={{ color: "#096b32", fontWeight: "bold" }}
-            >
-              Play Money 
-            </label>
-            <span className="personal-value">{formatNumber(allocations.personal)}</span>
+            <div className="input-row">
+              <label
+                className="input-label"
+                style={{ color: "#096b32", fontWeight: "bold" }}
+              >
+                Play Money 
+              </label>
+              <span className="personal-value">{formatNumber(allocations.personal)}</span>
+            </div>
           </div>
-          </div>
+
+          {/* Expenditure Card */}
+<div className="card expenditure-card">
+  <h3>Expenditure</h3>
+  <hr className="divider" />
+
+  <div className="expenditure-layout">
+    {/* LEFT COLUMN: Target + Field */}
+    <div className="expenditure-left">
+      <div className="input-row">
+        <input
+          type="number"
+          placeholder="Enter target amount"
+          className="salary-input"
+          value={targetAmount}
+          onChange={(e) => setTargetAmount(e.target.value)}
+        />
+      </div>
+
+      <div className="input-row">
+        <select
+          className="salary-input"
+          value={selectedField}
+          onChange={(e) => setSelectedField(e.target.value)}
+        >
+          <option value="">-- Choose a field --</option>
+          {fields.map((f) => (
+            <option key={f.id} value={f.id}>
+              {f.title}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    {/* MIDDLE COLUMN: Frequency Options */}
+    <div className="expenditure-middle">
+      <h4 className="section-title">Frequency of Payments</h4>
+      <label>
+        <input
+          type="radio"
+          name="frequency"
+          value="daily"
+          checked={frequency === "daily"}
+          onChange={(e) => setFrequency(e.target.value)}
+        />
+        Daily
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="frequency"
+          value="weekly"
+          checked={frequency === "weekly"}
+          onChange={(e) => setFrequency(e.target.value)}
+        />
+        Weekly
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="frequency"
+          value="monthly"
+          checked={frequency === "monthly"}
+          onChange={(e) => setFrequency(e.target.value)}
+        />
+        Monthly
+      </label>
+    </div>
+
+    {/* RIGHT COLUMN: Report */}
+    <div className="expenditure-right">
+      <div className="report-section">
+        <p>
+          Estimated Savings in a Month:{" "}
+          <strong>
+            {frequency === "daily"
+              ? formatNumber((targetAmount || 0) * 30)
+              : frequency === "weekly"
+              ? formatNumber((targetAmount || 0) * 4)
+              : frequency === "monthly"
+              ? formatNumber((targetAmount || 0) * 1)
+              : 0}
+          </strong>
+        </p>
+
+        <p>
+          Estimated Savings in a Year:{" "}
+          <strong>
+            {frequency === "daily"
+              ? formatNumber((targetAmount || 0) * 30 * 12)
+              : frequency === "weekly"
+              ? formatNumber((targetAmount || 0) * 4 * 12)
+              : frequency === "monthly"
+              ? formatNumber((targetAmount || 0) * 12)
+              : 0}
+          </strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
         </div>
       </div>
     </>
