@@ -7,7 +7,6 @@ const Dashboard = () => {
   const [fields, setFields] = useState([]);
 
   // NEW STATES for Expenditure section
-  const [targetAmount, setTargetAmount] = useState("");   // Target savings/expenditure
   const [selectedField, setSelectedField] = useState(""); // Which field it belongs to
   const [frequency, setFrequency] = useState("");         // daily / weekly / monthly
 
@@ -94,81 +93,80 @@ const Dashboard = () => {
       </div>
       
       <div className="dashboard-container">
-        <div class="card main">
-        {/* LEFT SIDE */}
-        <div className="dashboard-left">
-          {/* Salary input */}
-          <div className="input-row">
-            <label className="input-label">Salary</label>
-            <input
-              type="text"
-              value={formatNumber(salary)}
-              onChange={(e) => setSalary(parseNumber(e.target.value))}
-              placeholder="Enter your salary"
-              className="salary-input"
-            />
-          </div>
-
-
-          {/* Dynamic fields */}
-          {allocations.calcFields.map((f) => (
-            <div key={f.id} className="input-row custom-field">
-              {/* Title */}
+        <div className="card main">
+          {/* LEFT SIDE */}
+          <div className="dashboard-left">
+            {/* Salary input */}
+            <div className="input-row">
+              <label className="input-label">Salary</label>
               <input
                 type="text"
-                value={f.title}
-                onChange={(e) => updateField(f.id, "title", e.target.value)}
-                className="input-field"
-                style={{ color: f.color }}
+                value={formatNumber(salary)}
+                onChange={(e) => setSalary(parseNumber(e.target.value))}
+                placeholder="Enter your salary"
+                className="salary-input"
               />
+            </div>
 
-              {/* Amount */}
-              <input
-                type="number"
-                value={f.amount}
-                onChange={(e) => updateField(f.id, "amount", e.target.value)}
-                className="input-field"
-              />
-
-              {/* Type + Equals + Result */}
-              <div className="result-wrapper">
-                <select
-                  value={f.type}
-                  onChange={(e) => updateField(f.id, "type", e.target.value)}
+            {/* Dynamic fields */}
+            {allocations.calcFields.map((f) => (
+              <div key={f.id} className="input-row custom-field">
+                {/* Title */}
+                <input
+                  type="text"
+                  value={f.title}
+                  onChange={(e) => updateField(f.id, "title", e.target.value)}
                   className="input-field"
-                >
-                  <option value="fixed">₱</option>
-                  <option value="percent">%</option>
-                </select>
-                <span className="equals-sign">=</span>
+                  style={{ color: f.color }}
+                />
+
+                {/* Amount */}
+                <input
+                  type="number"
+                  value={f.amount}
+                  onChange={(e) => updateField(f.id, "amount", e.target.value)}
+                  className="input-field"
+                />
+
+                {/* Type + Equals + Result */}
+                <div className="result-wrapper">
+                  <select
+                    value={f.type}
+                    onChange={(e) => updateField(f.id, "type", e.target.value)}
+                    className="input-field"
+                  >
+                    <option value="fixed">₱</option>
+                    <option value="percent">%</option>
+                  </select>
+                  <span className="equals-sign">=</span>
                   <span className="calculated-value">{formatNumber(f.value)}</span>
 
-                <button
-                  className="delete-btn"
-                  onClick={() => deleteField(f.id)}
-                  title="Delete"
-                >
-                  ✖
-                </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteField(f.id)}
+                    title="Delete"
+                  >
+                    ✖
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {/* Add field button */}
-          <button className="add-btn" onClick={addField}>+ Add New Field</button>
-        </div>
+            {/* Add field button */}
+            <button className="add-btn" onClick={addField}>+ Add New Field</button>
+          </div>
         </div>
 
         {/* RIGHT SIDE */}
         <div className="dashboard-right">
           <div className="card large">
             <h4>Allocation Overview</h4>
-            <PieChart width={900} height={500}>
+            <PieChart width={700} height={300}>
               <Pie
                 data={pieData}
                 dataKey="value"
                 nameKey="name"
-                cx="50%"
+                cx="35%"   // move pie chart left
                 cy="50%"
                 outerRadius={100}
                 label
@@ -184,7 +182,7 @@ const Dashboard = () => {
                 })}
               </Pie>
               <Tooltip formatter={(value) => formatNumber(value)} />
-              <Legend />
+              <Legend layout="vertical" align="right" verticalAlign="middle" />
             </PieChart>
             {/* Personal Use */}
             <div className="input-row">
@@ -199,108 +197,101 @@ const Dashboard = () => {
           </div>
 
           {/* Expenditure Card */}
-<div className="card expenditure-card">
-  <h3>Expenditure</h3>
-  <hr className="divider" />
+          <div className="card expenditure-card">
+            <h3>Expenditure</h3>
+            
+            <div className="expenditure-layout">
+              
+              {/* LEFT COLUMN: Field Selector */}
+              <div className="expenditure-left">
+                <div className="input-row">
+                  <select
+                    className="salary-input"
+                    value={selectedField}
+                    onChange={(e) => setSelectedField(e.target.value)}
+                  >
+                    <option value="">-- Choose a field --</option>
+                    {allocations.calcFields.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-  <div className="expenditure-layout">
-    {/* LEFT COLUMN: Target + Field */}
-    <div className="expenditure-left">
-      <div className="input-row">
-        <input
-          type="number"
-          placeholder="Enter target amount"
-          className="salary-input"
-          value={targetAmount}
-          onChange={(e) => setTargetAmount(e.target.value)}
-        />
-      </div>
+              {/* MIDDLE COLUMN: Frequency Options */}
+              <div className="expenditure-middle">
+                <h4 className="section-title">Frequency of Payments</h4>
+                <label>
+                  <input
+                    type="radio"
+                    name="frequency"
+                    value="daily"
+                    checked={frequency === "daily"}
+                    onChange={(e) => setFrequency(e.target.value)}
+                  />
+                  Daily
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="frequency"
+                    value="weekly"
+                    checked={frequency === "weekly"}
+                    onChange={(e) => setFrequency(e.target.value)}
+                  />
+                  Weekly
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="frequency"
+                    value="monthly"
+                    checked={frequency === "monthly"}
+                    onChange={(e) => setFrequency(e.target.value)}
+                  />
+                  Monthly
+                </label>
+              </div>
 
-      <div className="input-row">
-        <select
-          className="salary-input"
-          value={selectedField}
-          onChange={(e) => setSelectedField(e.target.value)}
-        >
-          <option value="">-- Choose a field --</option>
-          {fields.map((f) => (
-            <option key={f.id} value={f.id}>
-              {f.title}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
+              {/* RIGHT COLUMN: Report */}
+              <div className="expenditure-right">
+                <div className="report-section">
+                  <span>Estimated Savings in:</span>
 
-    {/* MIDDLE COLUMN: Frequency Options */}
-    <div className="expenditure-middle">
-      <h4 className="section-title">Frequency of Payments</h4>
-      <label>
-        <input
-          type="radio"
-          name="frequency"
-          value="daily"
-          checked={frequency === "daily"}
-          onChange={(e) => setFrequency(e.target.value)}
-        />
-        Daily
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="frequency"
-          value="weekly"
-          checked={frequency === "weekly"}
-          onChange={(e) => setFrequency(e.target.value)}
-        />
-        Weekly
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="frequency"
-          value="monthly"
-          checked={frequency === "monthly"}
-          onChange={(e) => setFrequency(e.target.value)}
-        />
-        Monthly
-      </label>
-    </div>
+                  {(() => {
+                    // Lookup selected field value
+                    const field = allocations.calcFields.find(f => f.id === selectedField);
+                    const baseValue = field ? field.value : 0;
 
-    {/* RIGHT COLUMN: Report */}
-    <div className="expenditure-right">
-      <div className="report-section">
-        <p>
-          Estimated Savings in a Month:{" "}
-          <strong>
-            {frequency === "daily"
-              ? formatNumber((targetAmount || 0) * 30)
-              : frequency === "weekly"
-              ? formatNumber((targetAmount || 0) * 4)
-              : frequency === "monthly"
-              ? formatNumber((targetAmount || 0) * 1)
-              : 0}
-          </strong>
-        </p>
+                    // Frequency multipliers
+                    const monthly =
+                      frequency === "daily"
+                        ? baseValue * 30
+                        : frequency === "weekly"
+                        ? baseValue * 4
+                        : frequency === "monthly"
+                        ? baseValue
+                        : 0;
 
-        <p>
-          Estimated Savings in a Year:{" "}
-          <strong>
-            {frequency === "daily"
-              ? formatNumber((targetAmount || 0) * 30 * 12)
-              : frequency === "weekly"
-              ? formatNumber((targetAmount || 0) * 4 * 12)
-              : frequency === "monthly"
-              ? formatNumber((targetAmount || 0) * 12)
-              : 0}
-          </strong>
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
+                    const yearly = monthly * 12;
 
-
+                    return (
+                      <>
+                        <p>
+                          1 Month: <strong>{formatNumber(monthly)}</strong>
+                        </p>
+                        <p>
+                          1 Year: <strong>{formatNumber(yearly)}</strong>
+                        </p>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>

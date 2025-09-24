@@ -1,13 +1,13 @@
 /* ============================= */
-/* Global Layout & Reset */
+/* Global Reset & Layout */
 /* ============================= */
 body, html, #root {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* prevent whole page scrolling */
   font-family: Arial, sans-serif;
   font-size: 20px;
+  overflow: hidden; /* prevent whole page scrolling */
 }
 
 /* ============================= */
@@ -22,8 +22,8 @@ body, html, #root {
   background-color: #096b32;
   color: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 0 20px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   z-index: 1000;
@@ -35,27 +35,24 @@ body, html, #root {
 }
 
 /* ============================= */
-/* Dashboard Container */
+/* Dashboard Layout */
 /* ============================= */
 .dashboard-container {
   display: flex;
-  height: calc(100vh - 60px); /* fill screen minus navbar */
-  margin-top: 60px; /* push content below navbar */
-  overflow: hidden;
-  gap: 20px;
+  height: calc(100vh - 60px); /* subtract navbar height */
+  margin-top: 60px;           /* push content below navbar */
   padding: 20px;
+  gap: 20px;
+  overflow: hidden;
 }
 
-/* ============================= */
-/* Left & Right Panels */
-/* ============================= */
 .dashboard-left, 
 .dashboard-right {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto; /* allow scrolling within panel */
+  overflow-y: auto; /* internal scrolling */
   padding-right: 10px;
 }
 
@@ -69,20 +66,12 @@ body, html, #root {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.card.main {
-  width: 50vw;
-}
-
-.card.large {
-  flex: 2;
-}
-
-.card.small {
-  flex: 1;
-}
+.card.main { width: 50vw; }
+.card.large { flex: 2; }
+.card.small { flex: 1; }
 
 /* ============================= */
-/* Input Rows */
+/* Input Rows & Fields */
 /* ============================= */
 .input-row {
   display: flex;
@@ -113,22 +102,18 @@ body, html, #root {
   color: #333;
 }
 
-/* ============================= */
-/* Salary Input (Underline Style) */
-/* ============================= */
+/* Salary input (underline style) */
 .salary-input {
+  width: 200px;
   border: none;
   border-bottom: 2px solid #ccc;
+  background: transparent;
   outline: none;
   font-size: 16px;
   padding: 4px 0;
-  width: 200px;
-  background: transparent;
 }
 
-.salary-input:focus {
-  border-bottom: 2px solid #096b32; /* green underline */
-}
+.salary-input:focus { border-bottom: 2px solid #096b32; }
 
 .salary-input::placeholder {
   color: #aaa;
@@ -136,14 +121,8 @@ body, html, #root {
   font-size: 15px;
 }
 
-/* ============================= */
-/* Custom Fields */
-/* ============================= */
-.custom-field {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+/* Custom fields */
+.custom-field { gap: 10px; }
 
 .result-wrapper {
   display: flex;
@@ -151,31 +130,22 @@ body, html, #root {
   gap: 5px;
 }
 
-.equals-sign {
-  font-weight: bold;
-  margin: 0 5px;
-}
-
-.calculated-value {
-  display: inline-block;
-  min-width: 80px;
-  padding: 6px 8px;
-  font-size: 20px;
-}
+.equals-sign { font-weight: bold; margin: 0 5px; }
+.calculated-value { min-width: 80px; font-size: 20px; }
 
 /* ============================= */
 /* Buttons */
 /* ============================= */
 .add-btn {
+  width: 200px;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  border: 1px solid;
+  border-radius: 6px;
   background: transparent;
   color: #007bff;
-  padding: 10px;
-  border: solid 1px;
-  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-  width: 200px;
 }
 
 .add-btn:hover {
@@ -191,16 +161,14 @@ body, html, #root {
   cursor: pointer;
 }
 
-.delete-btn:hover {
-  color: darkred;
-}
+.delete-btn:hover { color: darkred; }
 
+/* ============================= */
 /* Expenditure Card */
+/* ============================= */
 .expenditure-card {
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 10px;
+  margin-top: 15px;
+  padding-top: 10px;  /* reduce gap at top */
 }
 
 .divider {
@@ -209,56 +177,81 @@ body, html, #root {
   margin: 10px 0 20px 0;
 }
 
-.frequency-options {
-  display: flex;
-  gap: 20px;
-  margin: 15px 0;
-}
-
-.report-section {
-  margin-top: 15px;
-  padding: 10px;
-  background: #f8f8f8;
-  border-radius: 6px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
+/* Grid layout inside expenditure card */
 .expenditure-layout {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  align-items: start; /* align all columns to top */
 }
 
-.expenditure-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
+/* Column 1: Field selector */
+.expenditure-left .salary-input {
+  width: 100%;
+  margin-top: 0;
 }
 
+/* Column 2: Frequency options */
 .expenditure-middle {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  flex: 0.5;
+  gap: 6px; /* tighter spacing */
+  margin-top: 0; /* remove extra push */
 }
 
+.expenditure-middle .section-title {
+  font-weight: bold;
+  font-size: 15px;
+  margin: 0; /* remove extra spacing */
+  line-height: 1.2;
+}
+
+/* Column 3: Report (no card look) */
 .expenditure-right {
-  flex: 1;
-  background: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
+  padding: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
 }
 
+/* Report text */
+.report-section p {
+  margin: 0.3rem 0;
+  font-size: 15px;
+}
+
+/* ============================= */
+/* Frequency & Reports */
+/* ============================= */
 .section-title {
   margin-bottom: 0.5rem;
   font-weight: bold;
   font-size: 16px;
 }
 
+.frequency-options {
+  display: flex;
+  gap: 20px;
+  margin: 15px 0;
+}
+
 .report-section p {
   margin: 0.5rem 0;
   font-size: 15px;
+}
+
+/* ============================= */
+/* Allocation Overview Fix */
+/* ============================= */
+.card {
+  margin-bottom: 5%; /* reduce space between cards */
+}
+
+.chart-container {
+  height: 250px;   /* smaller chart height */
+  margin-bottom: 0; /* remove bottom gap */
+  padding-bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
