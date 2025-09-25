@@ -6,9 +6,8 @@ const Dashboard = () => {
   const [salary, setSalary] = useState("");
   const [fields, setFields] = useState([]);
 
-  // NEW STATES for Expenditure section
-  const [selectedField, setSelectedField] = useState(""); // Which field it belongs to
-  const [frequency, setFrequency] = useState("");         // daily / weekly / monthly
+  const [selectedField, setSelectedField] = useState("");
+  const [frequency, setFrequency] = useState("");
 
   const COLORS = [
     "#0088FE", "#FFBB28", "#FF8042", "#A020F0", "#FF4444",
@@ -16,7 +15,6 @@ const Dashboard = () => {
     "#FFD700", "#40E0D0"
   ];
 
-  // Load saved fields from localStorage
   useEffect(() => {
     const savedFields = localStorage.getItem("fields");
     if (savedFields) {
@@ -24,12 +22,10 @@ const Dashboard = () => {
     }
   }, []);
 
-  // Save fields to localStorage
   useEffect(() => {
     localStorage.setItem("fields", JSON.stringify(fields));
   }, [fields]);
 
-  // Format with commas
   const formatNumber = (num) => {
     if (!num || isNaN(num)) return "";
     return Number(num).toLocaleString();
@@ -37,8 +33,12 @@ const Dashboard = () => {
 
   const parseNumber = (str) => str.replace(/,/g, "");
 
-  // Add new field
   const addField = () => {
+    if (fields.length >= 9) {
+      alert("You can only add up to 9 fields.");
+      return;
+    }
+
     const newField = {
       id: Date.now().toString(),
       title: "New Field",
@@ -49,17 +49,14 @@ const Dashboard = () => {
     setFields([...fields, newField]);
   };
 
-  // Update field
   const updateField = (id, key, value) => {
     setFields(fields.map((f) => (f.id === id ? { ...f, [key]: value } : f)));
   };
 
-  // Delete field
   const deleteField = (id) => {
     setFields(fields.filter((f) => f.id !== id));
   };
 
-  // Calculate allocations
   const allocations = useMemo(() => {
     const s = parseFloat(salary) || 0;
     let totalDeductions = 0;
@@ -80,7 +77,6 @@ const Dashboard = () => {
     return { calcFields, personal };
   }, [salary, fields]);
 
-  // Pie data
   const pieData = [
     ...allocations.calcFields.map((f) => ({ name: f.title, value: f.value })),
     { name: "Personal Use", value: allocations.personal }
@@ -94,11 +90,10 @@ const Dashboard = () => {
       
       <div className="dashboard-container">
         <div className="card main">
-          {/* LEFT SIDE */}
           <div className="dashboard-left">
-            {/* Salary input */}
-            <div className="input-row">
-              <label className="input-label">Salary</label>
+            {/* Salary header with inline input */}
+            <div className="salary-header">
+              <h2>Salary</h2>
               <input
                 type="text"
                 value={formatNumber(salary)}
@@ -111,7 +106,6 @@ const Dashboard = () => {
             {/* Dynamic fields */}
             {allocations.calcFields.map((f) => (
               <div key={f.id} className="input-row custom-field">
-                {/* Title */}
                 <input
                   type="text"
                   value={f.title}
@@ -119,16 +113,12 @@ const Dashboard = () => {
                   className="input-field"
                   style={{ color: f.color }}
                 />
-
-                {/* Amount */}
                 <input
                   type="number"
                   value={f.amount}
                   onChange={(e) => updateField(f.id, "amount", e.target.value)}
                   className="input-field"
                 />
-
-                {/* Type + Equals + Result */}
                 <div className="result-wrapper">
                   <select
                     value={f.type}
@@ -140,7 +130,6 @@ const Dashboard = () => {
                   </select>
                   <span className="equals-sign">=</span>
                   <span className="calculated-value">{formatNumber(f.value)}</span>
-
                   <button
                     className="delete-btn"
                     onClick={() => deleteField(f.id)}
@@ -152,12 +141,17 @@ const Dashboard = () => {
               </div>
             ))}
 
-            {/* Add field button */}
-            <button className="add-btn" onClick={addField}>+ Add New Field</button>
+            <button
+              className="add-btn"
+              onClick={addField}
+              disabled={fields.length >= 9}
+            >
+              + Add New Field
+            </button>
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
+        {/* Right side */}
         <div className="dashboard-right">
           <div className="card large">
             <h4>Allocation Overview</h4>
@@ -166,7 +160,7 @@ const Dashboard = () => {
                 data={pieData}
                 dataKey="value"
                 nameKey="name"
-                cx="35%"   // move pie chart left
+                cx="35%"
                 cy="50%"
                 outerRadius={100}
                 label
@@ -174,7 +168,7 @@ const Dashboard = () => {
                 {pieData.map((entry, index) => {
                   let color;
                   if (entry.name === "Personal Use") {
-                    color = "#096b32"; // Force green
+                    color = "#096b32";
                   } else {
                     color = COLORS[index % COLORS.length];
                   }
@@ -184,25 +178,21 @@ const Dashboard = () => {
               <Tooltip formatter={(value) => formatNumber(value)} />
               <Legend layout="vertical" align="right" verticalAlign="middle" />
             </PieChart>
-            {/* Personal Use */}
             <div className="input-row">
               <label
                 className="input-label"
                 style={{ color: "#096b32", fontWeight: "bold" }}
               >
-                Play Money 
+                Personal Use 
               </label>
               <span className="personal-value">{formatNumber(allocations.personal)}</span>
             </div>
           </div>
 
-          {/* Expenditure Card */}
+          {/* Expenditure card */}
           <div className="card expenditure-card">
             <h3>Expenditure</h3>
-            
             <div className="expenditure-layout">
-              
-              {/* LEFT COLUMN: Field Selector */}
               <div className="expenditure-left">
                 <div className="input-row">
                   <select
@@ -220,7 +210,6 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* MIDDLE COLUMN: Frequency Options */}
               <div className="expenditure-middle">
                 <h4 className="section-title">Frequency of Payments</h4>
                 <label>
@@ -255,17 +244,13 @@ const Dashboard = () => {
                 </label>
               </div>
 
-              {/* RIGHT COLUMN: Report */}
               <div className="expenditure-right">
                 <div className="report-section">
                   <span>Estimated Savings in:</span>
-
                   {(() => {
-                    // Lookup selected field value
                     const field = allocations.calcFields.find(f => f.id === selectedField);
                     const baseValue = field ? field.value : 0;
 
-                    // Frequency multipliers
                     const monthly =
                       frequency === "daily"
                         ? baseValue * 30
@@ -292,7 +277,6 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </>
