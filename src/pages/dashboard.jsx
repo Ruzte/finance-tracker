@@ -153,9 +153,9 @@ const Dashboard = () => {
 
         {/* Right side */}
         <div className="dashboard-right">
-          <div className="card large">
+          <div className="card allocation-card">
             <h4>Allocation Overview</h4>
-            <PieChart width={700} height={300}>
+            <PieChart width={800} height={400}>
               <Pie
                 data={pieData}
                 dataKey="value"

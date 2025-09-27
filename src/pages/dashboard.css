@@ -61,11 +61,13 @@ body, html, #root {
 /* ============================= */
 .card {
   background: #fff;
-  border-radius: 4px;
+  border-radius: 20px;
   border: 1.5px solid #555;
   padding: 20px;
   box-shadow: none;
-  margin-bottom: 10px; /* reduce bottom margin */
+  margin-bottom: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.4);  
+  box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .card.main { width: 50vw; }
@@ -78,6 +80,7 @@ body, html, #root {
 .salary-header {
   display: flex;
   align-items: center;
+  margin-top: 20px;
   gap: 10px;
 }
 
@@ -98,13 +101,27 @@ body, html, #root {
 }
 
 .salary-header .salary-input:focus {
-  border-bottom: 2px solid #096b32;
+  border-bottom: 3px solid #096b32;
 }
 
 .salary-header .salary-input::placeholder {
   color: #aaa;
   font-style: italic;
-  font-size: 15px;
+  font-size: 18px;
+}
+
+/* ============================= */
+/* Dropdown: "Choose a field" */
+/* ============================= */
+select.salary-input {
+  font-size: 20px;
+  padding: 8px 10px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #000;
+  box-sizing: border-box;
+  margin-top: -10px;
 }
 
 /* ============================= */
@@ -174,6 +191,18 @@ body, html, #root {
   color: white;
 }
 
+.add-btn:disabled {
+  background: #ccc !important;
+  color: #666 !important;
+  border: 1px solid #999 !important;
+  cursor: not-allowed !important;
+}
+
+.add-btn:disabled:hover {
+  background: #ccc !important;
+  color: #666 !important;
+}
+
 .delete-btn {
   background: none;
   border: none;
@@ -188,16 +217,18 @@ body, html, #root {
 /* Expenditure Card */
 /* ============================= */
 .expenditure-card {
-  margin-top: 10px;
+  margin-top: 0;
   padding-top: 10px;
   font-size: 20px; /* all text size 20px */
+  border: 1px solid rgba(0, 0, 0, 0.4);  
+  box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .expenditure-layout {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 30px;
-  align-items: start;
+  align-items: start; /* ensures top alignment of dropdown & columns */
 }
 
 .expenditure-middle {
@@ -228,11 +259,45 @@ body, html, #root {
 }
 
 /* ============================= */
+/* Allocation Overview Card */
+/* ============================= */
+.allocation-card {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 0;
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.4);  
+  box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.allocation-card h4 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+.allocation-card .chart-container {
+  height: 250px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.allocation-card .input-row {
+  margin-top: auto; /* keep personal use row near bottom */
+}
+
+/* ============================= */
 /* Allocation Overview Fix */
 /* ============================= */
 .card.large h4 {
   font-size: 20px;
-  font-weight: bold; /* bold Allocation Overview */
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
@@ -246,19 +311,6 @@ body, html, #root {
   flex-grow: 1;
 }
 
-/* Personal use row pinned closer to bottom */
 .card.large .input-row {
   margin-top: auto; /* pushes to bottom */
-}
-
-.add-btn:disabled {
-  background: #ccc !important;
-  color: #666 !important;
-  border: 1px solid #999 !important;
-  cursor: not-allowed !important;
-}
-
-.add-btn:disabled:hover {
-  background: #ccc !important;
-  color: #666 !important;
 }
