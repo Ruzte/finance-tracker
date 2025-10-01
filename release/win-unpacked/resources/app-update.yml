@@ -1,0 +1,4 @@
+owner: Ruzte
+repo: finance-tracker
+provider: github
+updaterCacheDirName: finance-tracker-updater

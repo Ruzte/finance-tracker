@@ -1,0 +1,16 @@
+directories:
+  output: release
+  buildResources: assets
+appId: com.yourcompany.finance-tracker
+productName: Finance Tracker
+files:
+  - filter:
+      - dist/**/*
+      - electron/**/*
+      - package.json
+extraMetadata:
+  main: electron/main.js
+win:
+  target: nsis
+  icon: public/vite.svg
+electronVersion: 38.1.2
